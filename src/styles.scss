@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@100;300;500;700&display=swap');
+
+$base-bg-color: #141414;
+$base-txt-color: #fff;
+$base-font-family: Jost, sans-serif, Arial;
+$btn-txt-color-hover: #255fe7;
+$btn-bg-color-hover: #fff;
+$min-width-top-item: 225px;
+$min-width-item: 250px;
+$scale-img: 1.05;
+$media-small-desktop: 1280px;
+
+.flex-row-wrap {
+    display: flex;
+    flex-wrap: wrap;
+}
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+@mixin grid-child-position($row-start, $row-end, $col-start, $col-end) {
+    grid-row: #{$row-start} / #{$row-end};
+    grid-column: #{$col-start} / #{$col-end};
+}
+@mixin element-colors($bg-color, $txt-color) {
+    background-color: $bg-color;
+    color: $txt-color;
+}
+
+body {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-auto-rows: auto;
+    @include element-colors($base-bg-color, $base-txt-color);
+    font-family: $base-font-family;
+    gap: 2em;
+    padding: 1em 1.5em;
+}
+
+header {
+    @include grid-child-position(1, 2, 1, 2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75em;
+}
+.platform-title {
+    font-size: 1.3em;
+}
+
+.header-buttons {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-basis: 8em;
+
+    button {
+        height: 40%;
+        flex: 1 0 50%;
+        border-radius: 5px;
+        border: none;
+        @include element-colors(transparent, $base-txt-color);
+    }
+    button:hover {
+        @include element-colors($btn-bg-color-hover, $btn-txt-color-hover);
+        cursor: pointer;
+    }
+}
+
+main {
+    @extend .flex-column;
+    @include grid-child-position(2, 3, 1, 2);
+    gap: 2em;
+}
+
+.section-title {
+    font-size: 1.2em;
+    padding: 0.5em;
+}
+
+.top {
+    @extend .flex-column;
+    
+    .items {
+        @extend .flex-row-wrap;
+        counter-reset: num-top 0;
+        order: 2;
+    }
+
+    .section-title {
+        order: 1;
+    }
+}
+.top-item {
+    flex: 1 0 $min-width-top-item;
+    display: flex;
+    counter-increment: num-top 1;
+
+    img {
+        width: 100%;
+        object-fit: contain;
+    }
+}
+
+#top-text::before {
+    content: counter(num-top);
+    font-weight: bold;
+}
+
+.first, .second {
+    @extend .flex-column;
+}
+
+.items {
+    @extend .flex-row-wrap;
+    gap: 0.5em 0.3em; 
+}
+.item {
+    flex: 1 0 $min-width-item;
+    display: flex;
+    
+    img {
+        flex: 1 0 auto;
+        object-fit: contain;
+        transition: all 0.2s ease-in-out;
+    }
+    img:hover {
+        transform: scale($scale-img);
+    }
+}
+
+footer {
+    @include grid-child-position(3, 4, 1, 2);
+}
+
+@media screen and (max-width: $media-small-desktop) {
+    .platform-title, 
+    .top-item:not(.top-item:nth-child(-n + 3)) {
+        display: none;
+    }
+}
